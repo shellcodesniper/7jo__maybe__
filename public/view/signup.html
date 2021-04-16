@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/login.css" type="text/css" media="all" />
+    <title>Document</title>
+</head>
+<body>
+    <div class = "imgg">
+        <img class = back_img src="/static/images/KakaoTalk_20210413_114117604.png"> 
+    </div>
+    <div id="container" class="main_container">
+        <div class="login_container">
+            <div class="form_container">
+                <form name="login_form" action="/api/user" method="PUT">
+                    <div class="form_title_div">
+                        <p class="form_title_p">가입 하기</p>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">이메일</a>
+                        </div>
+                        <div>
+                            <input type="text" name="email" placeholder="이메일" class="form_input"/>
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div id="alert_email" class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">비밀번호</a>
+                        </div>
+                        
+                        <div>
+                            <input type="password" name="password" placeholder="비밀번호 입력" class="form_input" />
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div id="alert_password" class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">닉네임</a>
+                        </div>
+                        <div>
+                            <input type="text" name="userName" placeholder="닉네임" class="form_input"/>
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div id="alert_username" class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <a class="form_item_name">연락처</a>
+                        </div>
+                        <div>
+                            <input type="tel" name="phoneNumber" onfocus="" placeholder="010을 포함한 핸드폰 번호를 입력해주세요." class="form_input" />   
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div id="alert_password2" class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div>
+                            <a class="form_item_name">차량번호 </a>
+                        </div>
+                        <div>
+                            <input type="text" name="carNum" onfocus="" placeholder="차량번호 (00허 0000)" class="form_input" />
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div id="alert_password2" class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    <div style="height: 10px;"></div>
+                    <div>
+                        <button type="button" class="form_submit_button" onclick="login()">가입</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
