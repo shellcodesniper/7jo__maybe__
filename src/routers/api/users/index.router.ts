@@ -24,7 +24,7 @@ namespace USER_ROUTER {
       };
       const token = JWT.sign(jwtData);
       ctx.cookies.set('token', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7 });
-      ctx.redirect('/');
+      return ctx.redirect('/');
       // return COMMON_UTIL.successResult(ctx, { token });
     }
     return COMMON_UTIL.errorResult(ctx, '비밀번호 혹은 이메일을 다시 확인해주시기바랍니다.');

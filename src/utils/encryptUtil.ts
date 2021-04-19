@@ -13,9 +13,7 @@ namespace ENCRYPT_UTIL {
   }
 
   export function Verify(password: string, encryptedPassword: string, salt: string): boolean {
-    const result: boolean = (
-      pbkdf2.pbkdf2Sync(password, salt, 2048, 256, 'sha512').toString('base64') === encryptedPassword)
-      || (pbkdf2.pbkdf2Sync(password, salt, 1024, 256, 'sha512').toString('base64') === encryptedPassword);
+    const result: boolean = pbkdf2.pbkdf2Sync(password, salt, 2048, 256, 'sha512').toString('base64') === encryptedPassword;
     return result;
   }
 }
