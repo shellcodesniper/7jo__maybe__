@@ -72,10 +72,6 @@ namespace DB_UTIL {
   }
 
   export function getDefault():mongoose.Connection { return mongoose.connection; }
-  export function getStock():mongoose.Connection { return mongoose.stockConnection!; }
-  export function getCaramella():mongoose.Connection { return mongoose.caramellaConnection!; }
-  export function getSandmood():mongoose.Connection { return mongoose.sandmoodConnection!; }
-  export function getOcean():mongoose.Connection { return mongoose.oceanConnection!; }
 }
 
 export default DB_UTIL;
