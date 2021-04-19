@@ -25,7 +25,7 @@ function login() {
     }
     
 
-    if (chkUsername && chkEmail && chkPw && chkPw2) {
+    if (chkEmail && chkPw ) {
         console.log('complete. form.submit();');
         form.submit();
     }

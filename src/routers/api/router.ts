@@ -1,7 +1,7 @@
+import Router from 'koa-router';
 import packageData from '@root/package.json';
 import { ctxType } from '@src/@types/types';
-
-import Router from 'koa-router';
+import userRouter from './users/router';
 
 const router = new Router();
 
@@ -19,8 +19,10 @@ router.get('/', async (ctx: ctxType) => {
   ctx.body = data;
 });
 
-router.get('ip', (ctx: ctxType) => {
+router.get('/ip', (ctx: ctxType) => {
   ctx.body = `${ctx.req.headers['x-forwarded-for'] || ctx.request.ip}`;
 });
+
+router.use('/user', userRouter.routes());
 
 export default router;

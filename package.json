@@ -15,7 +15,7 @@
     "prebuild": "yarn checkOnly && yarn clean; echo '정상.'",
     "build": "tsc --project ./tsconfig.build.json",
     "postbuild": "cp -rf ./public ./dist/ && echo '완료'",
-    "dev": "DEBUG=koa* NODE_PATH=src NODE_ENV=development nodemon -r tsconfig-paths/register --watch src --delay 1 --exec 'ts-node' ./bin/www.ts",
+    "dev": "NODE_PATH=src NODE_ENV=development nodemon -r tsconfig-paths/register --watch src --delay 1 --exec 'ts-node' ./bin/www.ts",
     "prod": "NODE_PATH=src NODE_ENV=production nodemon -r tsconfig-paths/register --watch src --delay 1 --exec 'ts-node' ./bin/www.ts",
     "debug": "NODE_PATH=src NODE_ENV=development DEBUG=* nodemon -r tsconfig-paths/register --watch src --delay 1 --exec 'ts-node' ./bin/www.ts",
     "docker:start": "NODE_ENV=production pm2-docker start ./dist/bin/www.js --node-args=\"-r ./tsconfig-paths-bootstrap.js\" -i max",
@@ -54,6 +54,7 @@
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
     "mongoose": "^5.12.4",
+    "pbkdf2": "^3.1.2",
     "pm2": "^4.5.6",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.4"

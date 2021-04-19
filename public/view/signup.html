@@ -14,7 +14,7 @@
     <div id="container" class="main_container">
         <div class="login_container">
             <div class="form_container">
-                <form name="login_form" action="/api/user" method="PUT">
+                <form id="register_form" action="/api/user/register" method="POST">
                     <div class="form_title_div">
                         <p class="form_title_p">가입 하기</p>
                     </div>
@@ -46,7 +46,7 @@
                             <a class="form_item_name">닉네임</a>
                         </div>
                         <div>
-                            <input type="text" name="userName" placeholder="닉네임" class="form_input"/>
+                            <input type="text" name="username" placeholder="닉네임" class="form_input"/>
                         </div>
                         <div class="form_text_alert_padding">
                             <div id="alert_username" class="form_text_alert"></div>
@@ -69,7 +69,7 @@
                             <a class="form_item_name">차량번호 </a>
                         </div>
                         <div>
-                            <input type="text" name="carNum" onfocus="" placeholder="차량번호 (00허 0000)" class="form_input" />
+                            <input type="text" name="carNumber" onfocus="" placeholder="차량번호 (00허 0000)" class="form_input" />
                         </div>
                         <div class="form_text_alert_padding">
                             <div id="alert_password2" class="form_text_alert"></div>
@@ -77,7 +77,7 @@
                     </div>
                     <div style="height: 10px;"></div>
                     <div>
-                        <button type="button" class="form_submit_button" onclick="login()">가입</button>
+                        <button type="button" class="form_submit_button" onclick="document.getElementById('register_form').submit()">가입</button>
                     </div>
                 </form>
             </div>
