@@ -23,6 +23,7 @@ router.get('/book/:parkId', async (ctx: ctxType) => {
   if (park && ctx.session) {
     if (park.inUse) {
       await ctx.render('goBackWithMessage.ejs', { msg: '이미 사용중인 주차공간입니다!' });
+      return;
     }
     const user = await USER_SERVICE.getUserWithId(ctx.session.userId);
     if (user) {
