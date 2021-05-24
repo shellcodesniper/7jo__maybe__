@@ -82,7 +82,7 @@ namespace COMMON_UTIL {
 
   export async function lackKeyResult(ctx: ctxType, lackKeys: string[]): Promise<void> {
     ctx.status = 500;
-    await ctx.render('goBackWithMessage.ejs', { msg: `Following Keys must need: ${lackKeys}` })
+    await ctx.render('goBackWithMessage.ejs', { msg: `Following Keys must need: ${lackKeys}` });
   }
 
   export function successResult(ctx: ctxType, data: any = {}, msg = '', statusCode = 200): void {
