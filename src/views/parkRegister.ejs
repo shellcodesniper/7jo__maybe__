@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone 7Jo</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+		<div class="row">
+			<div class="panel panel-primary">
+				<div class="panel-body">
+					<form method="POST" action="" role="form">
+						<div class="form-group">
+							<h2>주차공간 등록하기</h2>
+						</div>
+						<div class="form-group">
+              <label class="control-label" for="lat">위도</label>
+							<input id="lat" name="lat" type="text" maxlength="50" class="form-control" placeholder="주차장 위치를 클릭하시면 위도, 위도가 입력됩니다.">
+              <label class="control-label" for="long">경도</label>
+							<input id="long" name="long" type="text" maxlength="50" class="form-control" placeholder="주차장 위치를 클릭하시면 위도, 경도가 입력됩니다.">
+							<label class="control-label" for="signupName">주소</label>
+							<input id="address" name="address" type="text" maxlength="200" class="form-control" placeholder="주차장 위치를 클릭하시면 주소가 입력됩니다.">
+						</div>
+            <div class="form-group">
+              <div id="map" style="height: 600px;width:100%px;"></div>
+            </div>
+						<div class="form-group">
+							<label class="control-label" for="name">주차장 명칭</label>
+							<input id="name" name="name" type="text" maxlength="50" class="form-control" length="40" value="주차장이름">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="cost">주차장 시간당 이용가격</label>
+							<input id="cost" name="cost" type="number" maxlength="50" class="form-control" length="40" value="500">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="desc">주차장 사용방법</label>
+							<textarea id="desc" name="desc" rows="10" class="form-control" length="40">
+주차장 이용방법입니다.
+              </textarea>
+						</div>
+						<div class="form-group">
+							<button id="signupSubmit" type="submit" class="btn btn-info btn-block">주차 공간 등록하기</button>
+						</div>
+					
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7f7bc884a5d134611deb484e57e46a81&libraries=services"></script>
+    <script>
+      var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+      var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.45469994, 126.56520367), //지도의 중심좌표.
+        level: 2 //지도의 레벨(확대, 축소 정도)
+      };
+
+      const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+      const customOverlay = new kakao.maps.CustomOverlay({});
+      const infowindow = new kakao.maps.InfoWindow({ removable: true });
+      var geocoder = new kakao.maps.services.Geocoder();
+      var marker = new kakao.maps.Marker({ 
+          // 지도 중심좌표에 마커를 생성합니다 
+          position: map.getCenter() 
+      });
+      marker.setMap(map);
+
+      function searchDetailAddrFromCoords(coords, callback) {
+        // 좌표로 행정동 주소 정보를 요청합니다
+        geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);         
+      }
+
+      kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+    
+        // 클릭한 위도, 경도 정보를 가져옵니다 
+        var latlng = mouseEvent.latLng; 
+        
+        // 마커 위치를 클릭한 위치로 옮깁니다
+        marker.setPosition(latlng);
+        
+        var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+        message += '경도는 ' + latlng.getLng() + ' 입니다';
+
+        document.getElementById('lat').value = `${latlng.getLat()}`;
+        document.getElementById('long').value = `${latlng.getLng()}`;
+        searchDetailAddrFromCoords(latlng, function (result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+            document.getElementById('address').value = !!result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+          } else {
+            document.getElementById('address').value = '주소값을 지원하지 않음';
+          }
+        });
+        
+        // var resultDiv = document.getElementById('clickLatlng'); 
+        // resultDiv.innerHTML = message;
+      });
+    </script>
+</body>
+</html>

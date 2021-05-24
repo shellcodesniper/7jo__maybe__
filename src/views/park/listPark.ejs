@@ -1,0 +1,106 @@
+<html>
+  <head>
+  <title>Capstone 7Jo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+  </head>
+  <body>
+    <main>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">7JO - 주차공간 예약</a>
+      </div>
+    </nav>
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100%; position: fixed; z-index: 1; top: 56px; left: 0; margin-top:1px;">
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link text-white" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+              주차공간 지도
+            </a>
+          </li>
+          <li>
+            <a href="/park/list" class="nav-link active">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+              주차공간 목록 보기
+            </a>
+          </li>
+          <li>
+            <a href="/user/purchaseList" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+              결제내역
+            </a>
+          </li>
+          <li>
+            <a href="/park/history" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+              이용내역
+            </a>
+          </li>
+          <li>
+            <a href="/park/register" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+              주차장 등록
+            </a>
+          </li>
+        </ul>
+        <hr>
+        <div class="nav nav-pills flex-column mb-5 dropdown">
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong><%= username %></strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/user/logout">Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="container">
+          <h1>주차 공간 전체 목록 및 이용 신청</h1>
+          <h6>주차장 클릭시 예약 페이지로 넘어가게됩니다.</h6>
+          <br />
+          <div class="table-responsive">
+            <table class="table table-stripped mt-5 align-middle">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col" style="display: none">_id</th>
+                  <th scope="col">주소</th>
+                  <th scope="col">시간당 이용가격</th>
+                  <th scope="col">주차장 이용설명</th>
+                  <th scope="col">주차장 이용설명</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (var i = 0; i < parkList.length; i++ ) { %>
+                  <% const { _id, name, location, address, cost, inUse, description } = parkList[i] %>
+                    <tr onclick="location.href='/park/book/<%= _id %>'" class="<%= inUse ? "table-active" : ""%>">
+                    <th scope="row"><%= i + 1 %></th>
+                    <td style="display: none"><%= _id %></td>
+                    <td><%= address %></td>
+                    <td><%= cost %></td>
+                    <td><%= description.replace(/\n/g, ' ') %></td>
+                    <td><%= inUse ? "사용중" : "사용가능" %></td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7f7bc884a5d134611deb484e57e46a81"></script>
+  </body>
+</html>

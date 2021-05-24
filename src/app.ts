@@ -4,11 +4,40 @@ import koaBody from 'koa-body';
 import serve from 'koa-static';
 import mount from 'koa-mount';
 import path from 'path';
+import views from 'koa-views';
+import session from 'koa-session';
 
 import indexRouter from '@src/routers/router';
 import KOA_MIDDLEWARE from './middlewares/middleware';
 
+const render = views(path.join(__dirname, '/views'), {
+  options: {
+    async: true,
+  },
+  extension: 'ejs',
+  map: {
+    html: 'ejs',
+  },
+});
+
 const app:Koa = new Koa();
+
+app.keys = ['klasjdlfjskladfnlkqwejlkFSkdfmklqnrl1@#knflksdnklfvnxDFwoijrjk1klj23'];
+
+app.use(render);
+
+app.use(session({
+  key: 'koa.sess',
+  maxAge: 86400000,
+  autoCommit: true,
+  overwrite: true,
+  httpOnly: true,
+  signed: true,
+  rolling: true,
+  renew: false,
+  secure: false,
+  sameSite: 'none',
+}, app));
 
 const staticDirpath = path.join(__dirname, '..', 'public');
 const port: number = parseInt(`${process.env.PORT || '3000'}`, 10);

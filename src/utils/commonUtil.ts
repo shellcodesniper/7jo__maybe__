@@ -71,19 +71,18 @@ namespace COMMON_UTIL {
     }
   }
 
-  export function errorResult(ctx: ctxType, msg = '', statusCode = 500): void {
+  export async function errorResult(ctx: ctxType, msg = '', statusCode = 500): Promise<void> {
     ctx.status = statusCode;
-    ctx.body = { status: ctx.status, msg };
+    await ctx.render('goBackWithMessage.ejs', { msg });
   }
 
-  export function userNotFound(ctx: ctxType): void {
-    ctx.status = 401;
-    ctx.body = { status: ctx.status, msg: 'User Not Found..' };
+  export async function userNotFound(ctx: ctxType): Promise<void> {
+    await ctx.render('goBackWithMessage.ejs', { msg: '아이디 혹은 비밀번호를 확인해주시기 바랍니다.' });
   }
 
-  export function lackKeyResult(ctx: ctxType, lackKeys: string[]): void {
+  export async function lackKeyResult(ctx: ctxType, lackKeys: string[]): Promise<void> {
     ctx.status = 500;
-    ctx.body = { status: ctx.status, msg: `Following Keys must need: ${lackKeys}` };
+    await ctx.render('goBackWithMessage.ejs', { msg: `Following Keys must need: ${lackKeys}` })
   }
 
   export function successResult(ctx: ctxType, data: any = {}, msg = '', statusCode = 200): void {

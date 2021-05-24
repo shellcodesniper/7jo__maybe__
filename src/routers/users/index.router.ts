@@ -23,7 +23,14 @@ namespace USER_ROUTER {
         username: user.username,
       };
       const token = JWT.sign(jwtData);
-      ctx.cookies.set('token', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7 });
+      // ctx.cookies.set('token', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7 });
+
+      if (ctx.session) {
+        ctx.session.token = token;
+        ctx.session.userId = jwtData._id;
+        ctx.session.username = user.username;
+        ctx.session.save();
+      }
       return ctx.redirect('/');
       // return COMMON_UTIL.successResult(ctx, { token });
     }
@@ -47,6 +54,13 @@ namespace USER_ROUTER {
     await USER_SERVICE.createUser(user);
     // return COMMON_UTIL.successResult(ctx);
     return ctx.redirect('/');
+  }
+
+  export async function logoutAction(ctx: ctxType): Promise<void> {
+    if (ctx.session) {
+      ctx.session = null;
+    }
+    await ctx.render('gotoWithMessage.ejs', { msg: '로그아웃 완료되었습니다.', url: '/' });
   }
 }
 
