@@ -60,7 +60,7 @@ namespace USER_ROUTER {
     if (ctx.session) {
       ctx.session = null;
     }
-    await ctx.render('gotoWithMessage.ejs', { msg: '로그아웃 완료되었습니다.', url: '/' });
+    ctx.redirect('/');
   }
 }
 
