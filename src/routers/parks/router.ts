@@ -53,11 +53,15 @@ router.get('/list', async (ctx: ctxType) => {
     await ctx.render('park/listPark.ejs', { username: ctx.session.username || 'USER', parkList });
     return;
   }
-  await ctx.render('goToWithMessage.ejs', { msg: '로그인해주시기 바랍니다.' });
+  await ctx.render('goToWithMessage.ejs', { msg: '로그인해주시기 바랍니다.', url: '/' });
 });
 
 router.get('/register', async (ctx: ctxType) => {
-  await ctx.render('parkRegister.ejs');
+  if (ctx.session) {
+    await ctx.render('parkRegister.ejs', { username: ctx.session.username || 'USER' });
+    return;
+  }
+  await ctx.render('goToWithMessage.ejs', { msg: '로그인해주시기 바랍니다.', url: '/' });
 });
 
 router.post('/register', PARK_ROUTER.registerParkAction);
