@@ -37,7 +37,12 @@
     }
   },
   "dependencies": {
+    "@admin-bro/design-system": "^1.7.3",
+    "@admin-bro/koa": "^1.1.1",
+    "@admin-bro/mongoose": "^1.1.0",
+    "@koa/router": "^10.0.0",
     "@types/koa-session": "^5.10.3",
+    "admin-bro": "^4.0.1",
     "aws-sdk": "^2.888.0",
     "cookie-parser": "^1.4.5",
     "ejs": "^3.1.6",
@@ -57,6 +62,7 @@
     "koa-session": "^6.2.0",
     "koa-static": "^5.0.0",
     "koa-views": "^7.0.1",
+    "koa2-formidable": "^1.0.3",
     "mongoose": "^5.12.4",
     "pbkdf2": "^3.1.2",
     "pm2": "^4.5.6",

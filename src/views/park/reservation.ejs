@@ -18,6 +18,8 @@
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="/static/css/reservation.css" />
 
+	<script src="https://cdn.bootpay.co.kr/js/bootpay-3.3.2.min.js" type="application/javascript"></script>
+
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
@@ -30,35 +32,76 @@
 <% const { name, address, cost } = park %>
 <% const { username, phoneNumber, carNumber } = user; %>
 <body>
+	<nav class="navbar navbar-dark bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">7JO - 주차공간 예약</a>
+		</div>
+	</nav>
+	<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100%; position: fixed; z-index: 1; top: 56px; left: 0; margin-top:1px;">
+		<hr>
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="/" class="nav-link text-white" aria-current="page">
+					<svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+					주차공간 지도
+				</a>
+			</li>
+			<li>
+				<a href="/park/list" class="nav-link active">
+					<svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+					주차공간 목록 보기
+				</a>
+			</li>
+			<li>
+				<a href="/park/history" class="nav-link text-white">
+					<svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+					결제/이용내역
+				</a>
+			</li>
+			<li>
+				<a href="/park/register" class="nav-link text-white">
+					<svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+					주차장 등록
+				</a>
+			</li>
+		</ul>
+		<hr>
+		<div class="nav nav-pills flex-column mb-5 dropdown">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+				<img src="https://kuuwang.com/static/images/profile.png" alt="" width="32" height="32" class="rounded-circle me-2">
+				<strong><%= username %></strong>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+				<li><a class="dropdown-item" href="/user/profile">Profile</a></li>
+				<li><hr class="dropdown-divider"></li>
+				<li><a class="dropdown-item" href="/user/logout">Sign out</a></li>
+			</ul>
+		</div>
+	</div>
+
 	<div id="booking" class="section">
 		<div class="section-center">
 			<div class="container">
 				<div class="row">
 					<div class="booking-form">
-						<form action = "" method="POST">
+						<form id="bookform" onsubmit = "hijackSubmit(event); return false;" action = "" method="POST">
 							<div class="form-group">
 								<span class="form-label">주차장 이름</span>
-								<input class="form-control" type="text" value="<%= name %>"readonly>
+								<input class="form-control" name="parkName" type="text" value="<%= name %>"readonly>
 							</div>
 							<div class="form-group">
 								<span class="form-label">주차장 주소</span>
-								<input class="form-control" type="text" value="<%= address %>"readonly>
+								<input class="form-control" name="parkAddr" type="text" value="<%= address %>"readonly>
 							</div>
 							<div class="form-group">
 								<span class="form-label">시간당 가격</span>
-								<input class="form-control" type="number" value="<%= cost %>"readonly>
+								<input class="form-control" name="costPerHour" type="number" value="<%= cost %>"readonly>
 							</div>
 							<div class="row no-margin">
-								<div class="col-sm-6">
+								<div class="col-sm-12">
 									<div class="form-group">
 										<span class="form-label">시작</span>
 										<input class="form-control" name="startTime" type="time" required>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<span class="form-label">끝</span>
-										<input class="form-control" name="endTime" type="time" required>
 									</div>
 								</div>
 							</div>
@@ -77,7 +120,7 @@
 							<div class="form-btn">
                                 <div class="form-group">
 								<span class="form-label">사용시간</span>
-								<select id="useHour" class="form-control" required>
+								<select id="useHour" name="useMin" class="form-control" required>
 									<option value="" selected hidden> == 사용시간을 선택해주시기 바랍니다. ==</option>
                   <% for (var i = 30; i <= 60*72; i+= 30) {
                     const hour = Math.floor(i / 60);
@@ -94,7 +137,7 @@
 							</div>
               <div class="form-group">
 								<span class="form-label">예상가격</span>
-								<input id="predictCost" class="form-control" type="text" placeholder="0" value = "">
+								<input id="predictCost" class="form-control" type="text" placeholder="0" value = "" readonly>
 							</div>
 								<button class="submit-btn">예약</button>
 							</div>
@@ -115,6 +158,80 @@
         $('#predictCost').val(price);
       });
     });
+
+		async function hijackSubmit(e) {
+			e.preventDefault();
+			const parkId = window.location.pathname.split(',')[-1];
+			const price = parseInt($('#predictCost').val().replace('￦ ', ''), 10)
+			const parkName = $('#parkName').val()
+			const parkAddr = $('#parkAddr').val();
+			const returnData = await reqPaymentTest(parkId, price, parkName, parkAddr);
+			console.log (`RETURNDATA : ${returnData}`);
+			if (returnData) {
+				$('#bookform').attr('onsubmit', 'return true');$('#bookform').submit();
+				// ! chagne onsubmit attr
+			}
+		}
+
+		async function reqPaymentTest(parkId, price, parkName, parkAddr) {
+			return new Promise(resolve => {
+				BootPay.request({
+					price: price,
+					application_id: "5fdf53d82fa5c200270388c1",
+					name: `${parkName} [${parkAddr}]`,
+					pg: 'toss',
+					method: 'card',
+					show_agree_window: 0,
+					items: [
+						{
+							item_name: '나는 아이템', //상품명
+							qty: 1, //수량
+							unique: '123', //해당 상품을 구분짓는 primary key
+							price: price, //상품 단가
+							cat1: 'TOP', // 대표 상품의 카테고리 상, 50글자 이내
+							cat2: '티셔츠', // 대표 상품의 카테고리 중, 50글자 이내
+							cat3: '라운드 티', // 대표상품의 카테고리 하, 50글자 이내
+						}
+					],
+					user_info: {
+						username: 'testuser',
+						email: 'testemail',
+						addr: 'testAddr',
+						phone: '010-1234-4567'
+					},
+					order_id: `order_${parkId}`,
+					params: {},
+					account_expire_at: '2021-10-25',
+					extra: {
+						vbank_result: 1,
+						quota: '0,2,3',
+						theme: 'purple',
+					}
+				}).error(function (data) {
+					console.log(data);
+					resolve(false);
+				}).cancel(function (data) {
+					console.log(data);
+					resolve(false);
+				}).ready(function (data) {
+					console.log(data);
+				}).confirm(function (data) {
+					console.log(data);
+					var enable = true; // 재고 수량 관리 로직 혹은 다른 처리
+					if (enable) {
+						BootPay.transactionConfirm(data); // 조건이 맞으면 승인 처리를 한다.
+					} else {
+						BootPay.removePaymentWindow(); // 조건이 맞지 않으면 결제 창을 닫고 결제를 승인하지 않는다.
+					}
+				}).close(function (data) {
+						console.log(data);
+				}).done(function (data) {
+					console.log('done');
+					console.log(data);
+					return resolve(true);
+				});
+			});
+		}
   </script>
 </body>
 

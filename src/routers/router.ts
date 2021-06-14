@@ -7,7 +7,7 @@ const router = new Router();
 
 router.get('/', async (ctx: ctxType) => {
   if (ctx.session) {
-    if (ctx.session._id || ctx.session.token || ctx.session.username) {
+    if (ctx.session.userId || ctx.session.token || ctx.session.username) {
       await ctx.render('index.ejs', { username: ctx.session.username || 'USER' });
       return;
     }

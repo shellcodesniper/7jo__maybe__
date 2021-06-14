@@ -9,7 +9,7 @@ namespace indexRouter {
     } = ctx.req.body;
     if (ctx.session) {
       const parkData: ICreatePark = {
-        owner: ctx.session._id,
+        owner: ctx.session.userId,
         name,
         location: { lat, long },
         address,

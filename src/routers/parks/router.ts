@@ -3,6 +3,7 @@ import { ctxType } from '@src/@types/types';
 import PARK_SERVICE from '@services/park/park.service';
 import { IPark } from '@src/models/park/park.model';
 import USER_SERVICE from '@services/user/user.service';
+import COMMON_UTIL from '@src/utils/commonUtil';
 import PARK_ROUTER from './index.router';
 
 const router = new Router();
@@ -38,13 +39,23 @@ router.get('/book/:parkId', async (ctx: ctxType) => {
 });
 
 router.post('/book/:parkId', async (ctx: ctxType) => {
-  const { parkId } = ctx.params;
-  const park = await PARK_SERVICE.getPark(parkId);
-  if (park) {
-    park.inUse = true;
-    await park.save();
+  console.log(ctx.req.body);
+  const [success, lackKeys] = await COMMON_UTIL.objectHaveKeys(ctx.req.body, ['startTime', 'useMin']);
+  if (ctx.session && success) {
+    const { parkId } = ctx.params;
+    const { useMin, startTime } = ctx.req.body;
+    const resultMakeReservation = await PARK_SERVICE.createReservation({
+      requestUser: ctx.session.userId,
+      targetPark: parkId,
+      startTime,
+      useMin,
+    });
+    if (resultMakeReservation) await ctx.render('goToWithMessage.ejs', { msg: '예약이 완료되었습니다.', url: '/' });
+    else await ctx.render('goToWithMessage.ejs', { msg: '예약 생성중 오류발생.', url: '/' });
+    return;
   }
-  await ctx.render('goToWithMessage.ejs', { msg: '예약이 완료되었습니다.', url: '/' });
+  if (!success) await ctx.render('goBackWithMessage.ejs', { msg: `${lackKeys} 가 요청 본문에 존재하지 않습니다.`, url: '/' });
+  await ctx.render('goToWithMessage.ejs', { msg: '로그인해주시기 바랍니다.', url: '/' });
 });
 
 router.get('/list', async (ctx: ctxType) => {
@@ -65,5 +76,14 @@ router.get('/register', async (ctx: ctxType) => {
 });
 
 router.post('/register', PARK_ROUTER.registerParkAction);
+
+router.get('/history', async (ctx: ctxType) => {
+  if (ctx.session) {
+    const reserveList = await PARK_SERVICE.listReservation(ctx.session.userId);
+    await ctx.render('park/history.ejs', { username: ctx.session.usename || 'USER', reserveList });
+    return;
+  }
+  await ctx.render('goToWithMessage.ejs', { msg: '로그인해주시기 바랍니다.', url: '/' });
+});
 
 export default router;

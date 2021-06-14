@@ -1,4 +1,4 @@
-import User, { IUser } from '@models/users/user.model';
+import { IUser } from '@models/users/user.model';
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPark extends Document {
@@ -16,7 +16,7 @@ export interface IPark extends Document {
 }
 
 const ParkSchema: Schema = new Schema({
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: User },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   name: String,
   location: { lat: Number, long: Number }, // ? 위도 경도
   address: String, // ? 자세한 주소

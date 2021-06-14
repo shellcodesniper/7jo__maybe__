@@ -1,3 +1,4 @@
+import { IPark } from '@models/park/park.model';
 import { IUser } from '@src/models/users/user.model';
 
 export interface ICreatePark {
@@ -8,4 +9,11 @@ export interface ICreatePark {
   cost: number;
   description: string;
   inUse: boolean;
+}
+
+export interface ICreateReservation {
+  requestUser: IUser['_id'];
+  targetPark: IPark['_id'];
+  startTime: string;
+  useMin: number;
 }

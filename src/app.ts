@@ -6,8 +6,10 @@ import mount from 'koa-mount';
 import path from 'path';
 import views from 'koa-views';
 import session from 'koa-session';
-
+import { buildRouter } from '@admin-bro/koa';
 import indexRouter from '@src/routers/router';
+
+import adminBro from './adminBro';
 import KOA_MIDDLEWARE from './middlewares/middleware';
 
 const render = views(path.join(__dirname, '/views'), {
@@ -47,8 +49,6 @@ app.use(KOA_MIDDLEWARE.CookieParser);
 app.use(KOA_MIDDLEWARE.Compression);
 app.use(mount('/static', serve(staticDirpath)));
 
-const appRouter = new Router();
-
 const parseOption: koaBody.IKoaBodyOptions = {
   patchNode: true,
   formLimit: '10mb',
@@ -57,13 +57,25 @@ const parseOption: koaBody.IKoaBodyOptions = {
   onError: (err) => { console.error(err); },
 };
 
+const appRouter = new Router();
+
 appRouter.use('/', koaBody(parseOption), indexRouter.routes());
 
-app.use(appRouter.routes())
-  .use(appRouter.allowedMethods());
+const run = async () => {
+  const bro = await adminBro();
+  const broRouter = buildRouter(bro, app);
 
-app.listen(port, () => {
-  console.log('KuuWang Online.');
-});
+  // broRouter.use('/admin', broRouter.routes());
+
+  app
+    .use(appRouter.routes())
+    .use(broRouter.routes())
+    .use(appRouter.allowedMethods());
+  app.listen(port, () => {
+    console.log('KuuWang Online.');
+  });
+};
+
+run();
 
 export default app;
