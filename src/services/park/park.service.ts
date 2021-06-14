@@ -2,9 +2,9 @@ import Park, { IPark } from '@models/park/park.model';
 import Reservation from '@src/models/park/book.model';
 import USER_SERVICE from '@services/user/user.service';
 import { IUser } from '@src/models/users/user.model';
+import COMMON_UTIL from '@src/utils/commonUtil';
 
 import { ICreatePark, ICreateReservation } from './park.service.interface';
-import COMMON_UTIL from '@src/utils/commonUtil';
 
 namespace PARK_SERVICE {
   export async function listPark(): Promise<IPark[] | null> {

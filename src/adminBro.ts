@@ -35,7 +35,6 @@ export default async (): Promise<AdminBro> => {
       companyName: '7 JO',
     },
     dashboard: {
-      handler: async () => { console.log ('im handler'); },
       component: AdminBro.bundle('./broDashboard.jsx'),
     },
   });
