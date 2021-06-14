@@ -13,7 +13,7 @@ export interface ICreatePark {
 
 export interface ICreateReservation {
   requestUser: IUser['_id'];
-  targetPark: IPark['_id'];
+  parkTarget: IPark['_id'];
   startTime: string;
   useMin: number;
 }

@@ -25,20 +25,20 @@ namespace PARK_SERVICE {
   }
 
   export async function createReservation(data: ICreateReservation): Promise<boolean> {
-    const targetPark = await Park.findOne({ _id: data.targetPark });
+    const parkTarget = await Park.findOne({ _id: data.parkTarget });
     const requestUser = await USER_SERVICE.getUserWithId(data.requestUser);
     const { startTime, useMin } = data;
 
-    if (targetPark && requestUser) {
+    if (parkTarget && requestUser) {
       const book = new Reservation({
-        targetPark,
+        parkTarget,
         requestUser,
         startTime,
         useMin,
       });
       await book.save();
-      targetPark.inUse = true;
-      await targetPark.save();
+      parkTarget.inUse = true;
+      await parkTarget.save();
       return true;
     }
     return false;

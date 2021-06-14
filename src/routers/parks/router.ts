@@ -46,7 +46,7 @@ router.post('/book/:parkId', async (ctx: ctxType) => {
     const { useMin, startTime } = ctx.req.body;
     const resultMakeReservation = await PARK_SERVICE.createReservation({
       requestUser: ctx.session.userId,
-      targetPark: parkId,
+      parkTarget: parkId,
       startTime,
       useMin,
     });
