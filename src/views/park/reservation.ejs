@@ -162,7 +162,7 @@
 		async function hijackSubmit(e) {
 			e.preventDefault();
 			const parkId = window.location.pathname.split(',')[-1];
-			const price = parseInt($('#predictCost').val().replace('￦ ', ''), 10)
+			const price = parseInt($('#predictCost').val().replace('￦ ', '').replace(',', '').trim(), 10)
 			const parkName = $('#parkName').val()
 			const parkAddr = $('#parkAddr').val();
 			const returnData = await reqPaymentTest(parkId, price, parkName, parkAddr);
